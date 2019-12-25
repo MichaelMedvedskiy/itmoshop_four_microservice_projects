@@ -31,9 +31,9 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     private void initData(){
 
 
-        Item anal_zond = new Item("СТАЛИН 3000", 1L, 3000.);
-
-        itemRepository.save(anal_zond);
+//        Item anal_zond = new Item("СТАЛИН 3000", 1L, 3000.);
+//
+//        itemRepository.save(anal_zond);
 
     }
 }

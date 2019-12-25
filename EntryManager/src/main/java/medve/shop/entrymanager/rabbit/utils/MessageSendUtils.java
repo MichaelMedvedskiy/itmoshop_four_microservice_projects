@@ -1,4 +1,4 @@
-package medve.shop.entrymanager.rabbit;
+package medve.shop.entrymanager.rabbit.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class MessageSender {
+public class MessageSendUtils {
 	
-	private static final Logger log = LoggerFactory.getLogger(MessageSender.class);
+	private static final Logger log = LoggerFactory.getLogger(MessageSendUtils.class);
 	
 	/**
 	 * 

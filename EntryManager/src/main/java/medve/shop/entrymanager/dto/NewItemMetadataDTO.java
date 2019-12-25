@@ -1,42 +1,28 @@
-package medve.shop.warehouse.model;
+package medve.shop.entrymanager.dto;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by jt on 5/16/17.
- */
-@Entity
-public class ItemWarehouse {
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
+public class NewItemMetadataDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-
-
-    @Column(unique = true)
+    @NotNull
+    @JsonProperty("name")
     private String name;
+
+    @NotNull
+    @JsonProperty("availableAmount")
     private Long availableAmount;
+
+    @NotNull
+    @JsonProperty("price")
     private Double price;
 
-    public ItemWarehouse() {
-    }
-
-    public ItemWarehouse(String name, Long availableAmount, Double price) {
+    public NewItemMetadataDTO(String name, Long availableAmount, Double price) {
         this.name = name;
         this.availableAmount = availableAmount;
         this.price = price;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -62,5 +48,4 @@ public class ItemWarehouse {
     public void setPrice(Double price) {
         this.price = price;
     }
-
 }

@@ -16,12 +16,21 @@ public class ItemDTO implements Serializable {
     private Long amount;
 
 
+    @JsonProperty("warehouseId")
+    private Long warehouseId;
+
     public ItemDTO() {
     }
 
     public ItemDTO(Long id, Long amount) {
         this.id = id;
         this.amount = amount;
+    }
+
+    public ItemDTO(Long id, Long amount, Long warehouseId) {
+        this.id = id;
+        this.amount = amount;
+        this.warehouseId = warehouseId;
     }
 
     public Long getId() {
@@ -40,11 +49,21 @@ public class ItemDTO implements Serializable {
         this.amount = amount;
     }
 
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
     @Override
     public String toString() {
         return "ItemDTO{" +
                 "id=" + id +
                 ", amount=" + amount +
+                ", warehouseId=" + warehouseId +
                 '}';
     }
 }

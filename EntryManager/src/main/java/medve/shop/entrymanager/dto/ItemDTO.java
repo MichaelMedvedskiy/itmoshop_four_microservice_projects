@@ -11,28 +11,28 @@ import java.util.Set;
  * Created by jt on 5/16/17.
  */
 
-public class Item implements Serializable {
+public class ItemDTO implements Serializable {
 
-    @JsonProperty("id")
-    private Long id;
+    @JsonProperty("warehouseId")
+    private Long warehouseId;
+
     @JsonProperty("amount")
     private Long amount;
 
-
-    public Item() {
+    public ItemDTO() {
     }
 
-    public Item(Long id, Long amount) {
-        this.id = id;
+    public ItemDTO(Long warehouseId, Long amount) {
+        this.warehouseId = warehouseId;
         this.amount = amount;
     }
 
-    public Long getId() {
-        return id;
+    public Long getWarehouseId() {
+        return warehouseId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public Long getAmount() {
@@ -43,10 +43,11 @@ public class Item implements Serializable {
         this.amount = amount;
     }
 
+
     @Override
     public String toString() {
-        return "Item{" +
-                "id=" + id +
+        return "ItemDTO{" +
+                "warehouseId=" + warehouseId +
                 ", amount=" + amount +
                 '}';
     }

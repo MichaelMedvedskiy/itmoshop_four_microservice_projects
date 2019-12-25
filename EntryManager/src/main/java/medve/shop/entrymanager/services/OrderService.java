@@ -1,9 +1,9 @@
 package medve.shop.entrymanager.services;
 
 
-import medve.shop.entrymanager.rabbit.MessageSender;
-import medve.shop.entrymanager.config.ApplicationConfigReader;
-import medve.shop.entrymanager.dto.Order;
+import medve.shop.entrymanager.dto.OrderDTO;
+import medve.shop.entrymanager.rabbit.utils.MessageSendUtils;
+import medve.shop.entrymanager.rabbit.config.ApplicationConfigReader;
 import medve.shop.entrymanager.util.ApplicationConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 
@@ -23,11 +25,11 @@ import java.net.URI;
 @RequestMapping(path = "/ordermanager")
 public class OrderService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger log = LoggerFactory.getLogger(WarehouseService.class);
 
     private final RabbitTemplate rabbitTemplate;
     private ApplicationConfigReader applicationConfig;
-    private MessageSender messageSender;
+    private MessageSendUtils messageSender;
 
     public ApplicationConfigReader getApplicationConfig() {
         return applicationConfig;
@@ -43,25 +45,26 @@ public class OrderService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public MessageSender getMessageSender() {
-        return messageSender;
-    }
 
     @Autowired
-    public void setMessageSender(MessageSender messageSender) {
+    public void setMessageSender(MessageSendUtils messageSender) {
         this.messageSender = messageSender;
     }
 
 
+    /*
+    * Create new Order in the OrderManager Microservice DB. This only sends the DTO to the queue, that adds to the DB.
+    * */
+
     @RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendMessageAdd(@RequestBody Order order) {
+    public ResponseEntity<?> sendMessageAdd(@Valid @RequestBody OrderDTO orderDTO) {
 
         String exchange = getApplicationConfig().getOrderManagerExchange();
         String routingKey = getApplicationConfig().getOrderManagerAddRoutingKey();
 
         /* Sending to Message Queue */
         try {
-            messageSender.sendMessage(rabbitTemplate, exchange, routingKey, order);
+            messageSender.sendMessage(rabbitTemplate, exchange, routingKey, orderDTO);
             return new ResponseEntity<String>(ApplicationConstant.IN_QUEUE, HttpStatus.OK);
 
         } catch (Exception ex) {
@@ -72,9 +75,13 @@ public class OrderService {
 
     }
 
+    /*
+    * Send message of Order being PAID into corresponding queue
+    * */
+
     @Transactional
     @RequestMapping(path = "/paid/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendMessagePaid(@PathVariable("id") Long orderId) {
+    public ResponseEntity<?> sendMessagePaid(@NotNull @PathVariable("id") Long orderId) {
 
         String exchange = getApplicationConfig().getOrderManagerExchange();
         String routingKey = getApplicationConfig().getOrderManagerPaidRoutingKey();
@@ -96,7 +103,7 @@ public class OrderService {
         try{
             RestTemplate rt =  new RestTemplate();
             URI getOrder = new URI("http://localhost:8081/getOrder/"+orderId);
-            Order orderDTO =rt.getForObject(getOrder, Order.class);
+            OrderDTO orderDTO =rt.getForObject(getOrder, OrderDTO.class);
             messageSender.sendMessage(rabbitTemplate, exchange, routingKey, orderDTO);
         }catch (Exception ex){
             log.error("Exception occurred while sending message to the queue. Exception= {}", ex);

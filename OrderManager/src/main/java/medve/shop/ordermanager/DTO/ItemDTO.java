@@ -10,26 +10,27 @@ import java.io.Serializable;
 
 public class ItemDTO implements Serializable {
 
-    @JsonProperty("id")
-    private Long id;
+
+    @JsonProperty("warehouseId")
+    private Long warehouseId;
+
     @JsonProperty("amount")
     private Long amount;
-
 
     public ItemDTO() {
     }
 
-    public ItemDTO(Long id, Long amount) {
-        this.id = id;
+    public ItemDTO(Long warehouseId, Long amount) {
+        this.warehouseId = warehouseId;
         this.amount = amount;
     }
 
-    public Long getId() {
-        return id;
+    public Long getWarehouseId() {
+        return warehouseId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public Long getAmount() {
@@ -40,10 +41,11 @@ public class ItemDTO implements Serializable {
         this.amount = amount;
     }
 
+
     @Override
     public String toString() {
         return "ItemDTO{" +
-                "id=" + id +
+                "warehouseId=" + warehouseId +
                 ", amount=" + amount +
                 '}';
     }

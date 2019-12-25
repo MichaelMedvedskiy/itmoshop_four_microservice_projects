@@ -2,6 +2,7 @@ package medve.shop.ordermanager.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -13,23 +14,19 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany
-    @JoinTable(name = "item_order", joinColumns = @JoinColumn(name = "item_id"),
-    inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<Order> orders = new HashSet<>();
+    private Long warehouseId;
+
+    private Long amount;
+
 
     public Item() {
+
     }
 
-    public Item(String name, Long availableAmount, Double price) {
-        this.name = name;
-        this.availableAmount = availableAmount;
-        this.price = price;
+    public Item(Long whId, Long amount) {
+        this.warehouseId = whId;
     }
 
-    private String name;
-    private Long availableAmount;
-    private Double price;
 
 
 
@@ -41,34 +38,32 @@ public class Item {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Long getWarehouseId() {
+        return warehouseId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
-    public Long getAvailableAmount() {
-        return availableAmount;
+    public Long getAmount() {
+        return amount;
     }
 
-    public void setAvailableAmount(Long availableAmount) {
-        this.availableAmount = availableAmount;
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
-    public Double getPrice() {
-        return price;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        Item item = (Item) o;
+        return getWarehouseId().equals(item.getWarehouseId());
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getWarehouseId());
     }
 }
